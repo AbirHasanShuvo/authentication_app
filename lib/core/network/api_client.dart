@@ -13,10 +13,8 @@ class ApiClient {
       headers: {"Content-Type": "application/json"},
       body: jsonEncode(body),
     );
-
-    // Always print response for debugging
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
+    // print('Response status: ${response.statusCode}');
+    // print('Response body: ${response.body}');
 
     try {
       final data = jsonDecode(response.body) as Map<String, dynamic>;

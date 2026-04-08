@@ -13,4 +13,15 @@ class AuthService {
     });
     return LoginResponse.fromJson(response);
   }
+
+
+  Future<UserModel> register(String name, String email, String password) async {
+    final response = await apiClient.post('/auth/register', {
+      "name": name,
+      "email": email,
+      "password": password,
+    });
+
+    return UserModel.fromJson(response);
+  }
 }

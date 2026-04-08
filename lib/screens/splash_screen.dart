@@ -12,7 +12,6 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final AuthController authController = Get.find();
 
-    // Check login status immediately
     authController.autoLogin();
 
     return Scaffold(

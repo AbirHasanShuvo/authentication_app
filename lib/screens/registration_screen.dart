@@ -1,23 +1,20 @@
-import 'package:auth_login/controller/auth_controller.dart';
-import 'package:auth_login/screens/registration_screen.dart';
-import 'package:auth_login/theme/app_text_styles.dart';
-import 'package:auth_login/widgets/custom_button.dart';
-import 'package:auth_login/widgets/custom_textformfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../controller/auth_controller.dart';
+import '../widgets/custom_button.dart';
+import '../widgets/custom_textformfield.dart';
+import '../theme/app_text_styles.dart';
 
-class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key});
+class RegistrationScreen extends StatelessWidget {
+  RegistrationScreen({super.key});
 
   final _formKey = GlobalKey<FormState>();
+  final AuthController authController = Get.find<AuthController>();
 
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
-  final AuthController authController = Get.put(
-    AuthController(), 
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +26,7 @@ class LoginScreen extends StatelessWidget {
           children: [
             const SizedBox(height: 40),
             _welcomeText('Welcome', 30),
-            _welcomeText('Login Here', 20),
-            // SizedBox(height: MediaQuery.of(context).size.height * 0.15),
+            _welcomeText('Register Here', 20),
             SizedBox(height: 10),
             Expanded(
               child: Container(
@@ -48,7 +44,20 @@ class LoginScreen extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                      
+                        // NAME FIELD
+                        CustomTextFormField(
+                          prefixIcon: const Icon(Icons.person),
+                          hint: "Name",
+                          controller: nameController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Name is required";
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 10),
+
                         CustomTextFormField(
                           prefixIcon: const Icon(Icons.email),
                           hint: "Email",
@@ -69,12 +78,11 @@ class LoginScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 10),
 
-                        // PASSWORD FIELD
                         CustomTextFormField(
                           prefixIcon: const Icon(Icons.lock),
                           hint: "Password",
-                          controller: passwordController,
                           keyboardType: TextInputType.emailAddress,
+                          controller: passwordController,
                           isPassword: true,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -86,28 +94,19 @@ class LoginScreen extends StatelessWidget {
                             return null;
                           },
                         ),
+                        const SizedBox(height: 20),
 
-                        const SizedBox(height: 5),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            'Forgot Password?',
-                            style: AppTextStyles.caption,
-                          ),
-                        ),
-                        const SizedBox(height: 15),
-
-                        // SIGN IN BUTTON
                         Obx(
                           () => CustomButton(
                             text: authController.isLoading.value
-                                ? "Signing In..."
-                                : "Sign In",
+                                ? "Registering..."
+                                : "Register",
                             onTap: authController.isLoading.value
                                 ? null
                                 : () {
                                     if (_formKey.currentState!.validate()) {
-                                      authController.login(
+                                      authController.register(
+                                        nameController.text.trim(),
                                         emailController.text.trim(),
                                         passwordController.text.trim(),
                                       );
@@ -116,24 +115,11 @@ class LoginScreen extends StatelessWidget {
                             borderRadius: 10,
                           ),
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 15),
 
-                        Text(
-                          'Are you not registered?',
-                          style: GoogleFonts.roboto(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-
-                        const SizedBox(height: 10),
-
-                        // SIGN UP BUTTON
                         CustomButton(
-                          text: "Sign Up",
-                          onTap: () {
-                           Get.to(()=> RegistrationScreen());
-                          },
+                          text: "Back to Login",
+                          onTap: () => Get.back(),
                           borderRadius: 10,
                         ),
                       ],
